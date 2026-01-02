@@ -1,3 +1,36 @@
+```
+docker run -it --gpus=all nvcr.io/nvidia/cuda:12.8.0-devel-ubuntu24.04
+```
+
+```
+cd
+
+apt update
+apt install -y neovim curl git unzip git-lfs
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/huggingface/xet-core/refs/heads/main/git_xet/install.sh | sh
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+. $HOME/.local/bin/env
+uv venv --python=3.13
+. .venv/bin/activate
+uv pip install -U huggingface_hub hf-xet ninja wheel
+
+hf download XiaomiMiMo/MiMo-Audio-7B-Instruct
+hf download XiaomiMiMo/MiMo-Audio-Tokenizer
+
+git clone https://github.com/XiaomiMiMo/MiMo-Audio.git
+git clone https://github.com/Dao-AILab/flash-attention.git 
+cd MiMo-Audio
+uv pip install -r requirements.txt
+uv pip install ../flash-attention
+
+mkdir models
+ln -s /root/.cache/huggingface/hub/models--XiaomiMiMo--MiMo-Audio-7B-Instruct/snapshots/6fd52f6aa692f46f5091b12d538b18cf3cb0327c ./models/MiMo-Audio-7B-Instruct
+ln -s /root/.cache/huggingface/hub/models--XiaomiMiMo--MiMo-Audio-Tokenizer/snapshots/c00d7b05062f6eda60890a03b9dfcb7da09b1d29 ./models/MiMo-Audio-Tokenizer
+
+python run_mimo_audio.py
+```
+
 <div align="center">
   <picture>
     <source srcset="https://github.com/XiaomiMiMo/MiMo-VL/raw/main/figures/Xiaomi_MiMo_darkmode.png?raw=true" media="(prefers-color-scheme: dark)">
