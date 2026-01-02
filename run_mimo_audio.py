@@ -178,7 +178,7 @@ class MultiModalSpeechInterface:
         if not self.model_initialized:
             return "", "❌ Error: Model not initialized, please load the model first"
         
-        if input_audio is None:
+        if input_audio is None or not os.path.isfile(input_audio):
             return "", "❌ Error: Please upload an audio file"
         
         try:
